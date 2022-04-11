@@ -2,7 +2,7 @@ package com.devanshu.todoapp20.di
 
 import android.content.Context
 import androidx.room.Room
-import com.devanshu.todoapp20.data.models.ToDoDatabase
+import com.devanshu.todoapp20.data.ToDoDatabase
 import com.devanshu.todoapp20.utils.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides

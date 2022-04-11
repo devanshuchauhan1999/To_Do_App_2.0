@@ -1,6 +1,7 @@
-package com.devanshu.todoapp20.data.models
+package com.devanshu.todoapp20.data
 
 import androidx.room.*
+import com.devanshu.todoapp20.data.models.ToDoTask
 import kotlinx.coroutines.flow.Flow
 
 @Dao
