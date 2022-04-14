@@ -2,7 +2,6 @@ package com.devanshu.todoapp20.ui.screens.list
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,20 +25,44 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import com.devanshu.todoapp20.components.PriorityItem
 import com.devanshu.todoapp20.ui.theme.*
+import com.devanshu.todoapp20.ui.viewmodels.SharedViewModel
+import com.devanshu.todoapp20.utils.SearchAppBarState
+import com.devanshu.todoapp20.utils.TrailingIconState
 
 @Composable
-fun ListAppBar(){
-//    DefaultListAppBar(
-//        onSearchClicked = {},
-//        onSortClicked = {},
-//        onDeleteClicked = {}
-//    )
-    SearchAppBar(
-        text = "",
-        onTextChange = {},
-        onCloseClicked = {},
-        onSearchClicked = {}
-    )
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchTextState: String
+){
+    when(searchAppBarState){
+        SearchAppBarState.CLOSED ->{
+            DefaultListAppBar(
+                onSearchClicked = {
+                                  sharedViewModel.searchAppBarState.value =
+                                      SearchAppBarState.OPENED
+                },
+                onSortClicked = {},
+                onDeleteClicked = {}
+            )
+        }
+        else ->{
+            SearchAppBar(
+                text = searchTextState,
+                onTextChange = { newText ->
+                               sharedViewModel.searchTextState.value = newText
+                },
+                onCloseClicked = {
+                                 sharedViewModel.searchAppBarState.value =
+                                     SearchAppBarState.CLOSED
+                                sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = {}
+            )
+        }
+    }
+
+
 
 }
 
@@ -181,6 +204,11 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ){
+
+    var trailingIconState by remember {
+        mutableStateOf(TrailingIconState.READY_TO_DELETE)
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -223,7 +251,20 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        onCloseClicked()
+                        when(trailingIconState){
+                            TrailingIconState.READY_TO_DELETE ->{
+                                onTextChange("")
+                                trailingIconState = TrailingIconState.READY_TO_CLOSE
+                            }
+                            TrailingIconState.READY_TO_CLOSE ->{
+                                if (text.isEmpty()){
+                                    onTextChange("")
+                                }else{
+                                    onCloseClicked()
+                                    trailingIconState = TrailingIconState.READY_TO_DELETE
+                                }
+                            }
+                        }
                     })
                         {
                         Icon(

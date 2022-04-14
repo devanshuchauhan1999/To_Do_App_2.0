@@ -1,9 +1,12 @@
 package com.devanshu.todoapp20.ui.viewmodels
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devanshu.todoapp20.data.models.ToDoTask
 import com.devanshu.todoapp20.data.repositories.ToDoRepository
+import com.devanshu.todoapp20.utils.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +19,12 @@ class SharedViewModel @Inject constructor(
     private val repository: ToDoRepository
 ):ViewModel() {
 
+    //observe search app bar
+    val searchAppBarState: MutableState<SearchAppBarState> =
+        mutableStateOf(SearchAppBarState.CLOSED)
+    val searchTextState: MutableState<String> = mutableStateOf("")
+
+    //observe all tasks from room db
     private val _allTasks = MutableStateFlow<List<ToDoTask>>(emptyList())
     val allTasks: StateFlow<List<ToDoTask>> = _allTasks
 
