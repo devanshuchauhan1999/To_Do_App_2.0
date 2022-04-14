@@ -1,5 +1,7 @@
 package com.devanshu.todoapp20.ui.screens.list
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,44 +36,41 @@ fun ListAppBar(
     sharedViewModel: SharedViewModel,
     searchAppBarState: SearchAppBarState,
     searchTextState: String
-){
-    when(searchAppBarState){
-        SearchAppBarState.CLOSED ->{
+) {
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
                 onSearchClicked = {
-                                  sharedViewModel.searchAppBarState.value =
-                                      SearchAppBarState.OPENED
+                    sharedViewModel.searchAppBarState.value =
+                        SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
                 onDeleteClicked = {}
             )
         }
-        else ->{
+        else -> {
             SearchAppBar(
                 text = searchTextState,
                 onTextChange = { newText ->
-                               sharedViewModel.searchTextState.value = newText
+                    sharedViewModel.searchTextState.value = newText
                 },
                 onCloseClicked = {
-                                 sharedViewModel.searchAppBarState.value =
-                                     SearchAppBarState.CLOSED
-                                sharedViewModel.searchTextState.value = ""
+                    sharedViewModel.searchAppBarState.value =
+                        SearchAppBarState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
                 },
                 onSearchClicked = {}
             )
         }
     }
-
-
-
 }
 
 @Composable
 fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
-    onSortClicked :(Priority) -> Unit,
+    onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit
-){
+) {
     TopAppBar(
         title = {
             Text(
@@ -79,7 +78,7 @@ fun DefaultListAppBar(
                 color = MaterialTheme.colors.topAppBarContentColor
             )
         },
-        actions ={
+        actions = {
             ListAppBarActions(
                 onSearchClicked = onSearchClicked,
                 onSortClicked = onSortClicked,
@@ -93,10 +92,9 @@ fun DefaultListAppBar(
 @Composable
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
-    onSortClicked :(Priority) -> Unit,
+    onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit
-
-){
+) {
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
     DeleteAllAction(onDeleteClicked = onDeleteClicked)
@@ -105,8 +103,10 @@ fun ListAppBarActions(
 @Composable
 fun SearchAction(
     onSearchClicked: () -> Unit
-){
-    IconButton(onClick = {onSearchClicked}) {
+) {
+    IconButton(
+        onClick = { onSearchClicked() }
+    ) {
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(id = R.string.search_desc),
@@ -117,11 +117,13 @@ fun SearchAction(
 
 @Composable
 fun SortAction(
-    onSortClicked :(Priority) -> Unit
-){
-    var expanded by remember { mutableStateOf(false)}
+    onSortClicked: (Priority) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
 
-    IconButton(onClick = { expanded=true }) {
+    IconButton(
+        onClick = { expanded = true }
+    ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_filter_list),
             contentDescription = stringResource(id = R.string.sort_desc),
@@ -129,31 +131,27 @@ fun SortAction(
         )
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false}
+            onDismissRequest = { expanded = false }
         ) {
-            // For Low Item
             DropdownMenuItem(
                 onClick = {
-                    expanded =false
+                    expanded = false
                     onSortClicked(Priority.LOW)
                 }
             ) {
                 PriorityItem(priority = Priority.LOW)
             }
-
-            //For High Item
             DropdownMenuItem(
                 onClick = {
-                    expanded =false
+                    expanded = false
                     onSortClicked(Priority.HIGH)
                 }
             ) {
                 PriorityItem(priority = Priority.HIGH)
             }
-            // For None Item
             DropdownMenuItem(
                 onClick = {
-                    expanded =false
+                    expanded = false
                     onSortClicked(Priority.NONE)
                 }
             ) {
@@ -169,7 +167,9 @@ fun DeleteAllAction(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    IconButton(onClick = { expanded = true }) {
+    IconButton(
+        onClick = { expanded = true }
+    ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_more_vert),
             contentDescription = stringResource(id = R.string.delete_all_action),
@@ -181,21 +181,20 @@ fun DeleteAllAction(
         ) {
             DropdownMenuItem(
                 onClick = {
-                    expanded =false
+                    expanded = false
                     onDeleteClicked()
-
-                }) {
+                }
+            ) {
                 Text(
-                    modifier = Modifier.padding(start = MEDIUM_PADDING),
+                    modifier = Modifier
+                        .padding(start = LARGE_PADDING),
                     text = stringResource(id = R.string.delete_all_action),
-                    style = Typography.subtitle2,
+                    style = Typography.subtitle2
                 )
-
             }
         }
     }
 }
-
 
 @Composable
 fun SearchAppBar(
@@ -203,8 +202,7 @@ fun SearchAppBar(
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
-){
-
+) {
     var trailingIconState by remember {
         mutableStateOf(TrailingIconState.READY_TO_DELETE)
     }
@@ -217,6 +215,8 @@ fun SearchAppBar(
         color = MaterialTheme.colors.topAppBarBackgroundColor
     ) {
         TextField(
+            modifier = Modifier
+                .fillMaxWidth(),
             value = text,
             onValueChange = {
                 onTextChange(it)
@@ -232,14 +232,13 @@ fun SearchAppBar(
             textStyle = TextStyle(
                 color = MaterialTheme.colors.topAppBarContentColor,
                 fontSize = MaterialTheme.typography.subtitle1.fontSize
-
             ),
             singleLine = true,
             leadingIcon = {
                 IconButton(
                     modifier = Modifier
                         .alpha(ContentAlpha.disabled),
-                    onClick = {},
+                    onClick = {}
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
@@ -251,28 +250,28 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        when(trailingIconState){
-                            TrailingIconState.READY_TO_DELETE ->{
+                        when (trailingIconState) {
+                            TrailingIconState.READY_TO_DELETE -> {
                                 onTextChange("")
                                 trailingIconState = TrailingIconState.READY_TO_CLOSE
                             }
-                            TrailingIconState.READY_TO_CLOSE ->{
-                                if (text.isEmpty()){
+                            TrailingIconState.READY_TO_CLOSE -> {
+                                if (text.isNotEmpty()) {
                                     onTextChange("")
-                                }else{
+                                } else {
                                     onCloseClicked()
                                     trailingIconState = TrailingIconState.READY_TO_DELETE
                                 }
                             }
                         }
-                    })
-                        {
-                        Icon(
-                            imageVector = Icons.Filled.Close ,
-                            contentDescription = "Close Icon",
-                            tint = MaterialTheme.colors.topAppBarContentColor
-                        )
                     }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close Icon",
+                        tint = MaterialTheme.colors.topAppBarContentColor
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search
@@ -295,18 +294,17 @@ fun SearchAppBar(
 
 @Composable
 @Preview
-private fun DefaultListAppBarPreview(){
+private fun DefaultListAppBarPreview() {
     DefaultListAppBar(
         onSearchClicked = {},
         onSortClicked = {},
         onDeleteClicked = {}
     )
-
 }
 
 @Composable
 @Preview
-private fun SearchAppBarPreview(){
+private fun SearchAppBarPreview() {
     SearchAppBar(
         text = "",
         onTextChange = {},
