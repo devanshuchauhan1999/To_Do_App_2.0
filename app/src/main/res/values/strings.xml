@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">To Do App 2.0</string>
-    <string name="add_button">"Add Button",</string>
+    <string name="add_button">"Add Button"</string>
+    <string name="search_desc">"Search Tasks"</string>
+    <string name="sort_desc">Sort Tasks</string>
+    <string name="delete_all_action">Delete All</string>
 </resources>

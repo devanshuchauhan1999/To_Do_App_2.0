@@ -12,7 +12,7 @@ val Teal200 = Color(0xFF03DAC5)
 val LowPriorityColor = Color(0xFF00C980)
 val MediumPriorityColor = Color(0xFFFFC114)
 val HighPriorityColor = Color(0xFFFF4646)
-val NonePriorityColor = Color(0xFFFFFFFF)
+val NonePriorityColor = Color(0xFFEEE9E9)
 
 
 val LightGray = Color(0xFFFCFCFC)
@@ -26,3 +26,8 @@ val Colors.topAppBarContentColor : Color
 val Colors.topAppBarBackgroundColor : Color
     @Composable
     get() = if (isLight) Purple500 else Color.Black
+
+
+val Colors.fabBackgroundColor : Color
+    @Composable
+    get() = if (isLight) Teal200 else Purple700
