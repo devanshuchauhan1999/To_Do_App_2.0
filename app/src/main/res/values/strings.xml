@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">To Do App 2.0</string>
-    <string name="add_button">"Add Button"</string>
-    <string name="search_desc">"Search Tasks"</string>
+    <string name="add_button">Add Button</string>
+    <string name="search_desc">Search Tasks</string>
     <string name="sort_desc">Sort Tasks</string>
     <string name="delete_all_action">Delete All</string>
+    <string name="list_screen_title">Tasks</string>
+    <string name="search_placeholder">Search</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="close_icon">Close Icon</string>
+    <string name="sad_face_icon">Sad Face Icon</string>
+    <string name="no_data_found">No Data Found</string>
 </resources>
